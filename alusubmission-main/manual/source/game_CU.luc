@@ -1,0 +1,858 @@
+module game_CU (
+    input clk,  // clock
+    input rst,  // reset
+    input regfiledatab[16],
+    input regfiledataa[16],
+    input button,
+    
+    output alufn[6],
+    output asel[3],
+    output bsel[3],
+    output wdsel[2],
+    output we,
+    output regfile_write_address[4],
+    output regfile_read_address_a[4],
+    output regfile_read_address_b[4],
+    output state[16],
+    output debug[16]
+    
+  ) 
+{
+   .clk(clk){
+    
+    fsm game_fsm={
+      IDLE, //0
+      SETSTART, //1
+      RESET2, //2
+      RESET3,
+      RESET4,
+      RESET5,
+      RESET6,
+      RESET7,
+      RESET8, //8
+      CHECK2, //9
+      CHECK3, //10
+      CHECK4, //11
+      CHECK5, //12
+      CHECK6, //13
+      CHECK7, //14 
+      CHECK8, //15
+      LINE1, // 16
+      LINE2,
+      LINE3,
+      LINE4,
+      LINE5,
+      LINE6,
+      LINE7,
+      LINE8,
+      SHIFTL1,
+      SHIFTL2,
+      SHIFTL3,
+      SHIFTL4,
+      SHIFTL5,
+      SHIFTL6,
+      SHIFTL7,
+      SHIFTL8,
+      SHIFTR1,
+      SHIFTR2,
+      SHIFTR3,
+      SHIFTR4,
+      SHIFTR5,
+      SHIFTR6,
+      SHIFTR7,
+      SHIFTR8,
+      LOSE,
+      LEVELUP,
+      RESETLINE,
+      INCREASELINE,
+      INCREASESCORE,
+      DETERMINENEXT,
+      CHECKLOSE,
+      MINUS8
+    };
+    .rst(rst){
+      dff state_counter[16](#INIT(0));
+      dff statedff[16]; // game state
+     }
+    
+  }
+  
+  always {
+    alufn = 0;
+    asel = 0; 
+    bsel = 0;
+    we = 0;
+    wdsel = 0;
+    regfile_write_address = 0;
+    regfile_read_address_a = 0;
+    regfile_read_address_b = 0;
+    
+    state = statedff.q;
+    state_counter.d = 0;
+    debug = state_counter.q;
+    
+    if (rst){
+      game_fsm.d = game_fsm.IDLE;
+    }
+    else{
+    
+    case(game_fsm.q){
+    
+      game_fsm.IDLE:
+        regfile_write_address = b1001;
+        wdsel = b01;
+        we = b1;
+        // state testb
+        statedff.d = regfiledataa;
+        regfile_read_address_a = b1011;
+        state_counter.d = 0;  // show which state we are in
+        if (button){
+          game_fsm.d = game_fsm.SETSTART;
+        }
+        else{
+          game_fsm.d = game_fsm.IDLE;
+        }
+          
+      game_fsm.SETSTART:
+        regfile_write_address = b1001;
+        we = b1;
+        wdsel = b10;
+        state_counter.d = 1;  // show which state we are in          
+        statedff.d = regfiledataa;
+        regfile_read_address_a = b1011;
+        if(button){
+        game_fsm.d = game_fsm.RESET2;
+          }
+          else{
+          game_fsm.d = game_fsm.SETSTART;
+        }
+        // state test
+        //statedff.d = b00000001;
+        
+        
+  
+      game_fsm.RESET2:
+        regfile_write_address = b0010;
+        wdsel = b01;
+        we = b1;
+        // state test
+        statedff.d = regfiledataa;
+        regfile_read_address_a = b1011;
+        state_counter.d = 2;                      
+        if(button){
+        game_fsm.d = game_fsm.RESET3;
+          }
+          else{
+          game_fsm.d = game_fsm.RESET2;
+        }
+          
+      game_fsm.RESET3:
+        regfile_write_address = b0011;
+        wdsel = b01;
+        we = b1;
+        statedff.d = regfiledataa;
+        regfile_read_address_a = b1011;
+        state_counter.d = 3;  // show which state we are in                     
+          if (button){
+        game_fsm.d = game_fsm.RESET4;
+          }
+          else{
+          game_fsm.d = game_fsm.RESET3;
+        }
+          
+      game_fsm.RESET4:
+        regfile_write_address = b0100;
+        wdsel = b01;
+        we = b1;
+        statedff.d = regfiledataa;
+        regfile_read_address_a = b1011;
+        state_counter.d = 4;  // show which state we are in                              
+          if(button){
+        game_fsm.d = game_fsm.RESET5;
+          }
+          else{
+          game_fsm.d = game_fsm.RESET4;
+        }
+          
+      game_fsm.RESET5:
+        regfile_write_address = b0101;
+        wdsel = b01;
+        we = b1;        
+        statedff.d = regfiledataa;
+        regfile_read_address_a = b1011;
+        state_counter.d = 5;  // show which state we are in                     
+          if(button){
+        game_fsm.d = game_fsm.RESET6;
+          }
+          else{
+          game_fsm.d = game_fsm.RESET5;
+        }
+          
+      game_fsm.RESET6:
+        regfile_write_address = b0110;
+        wdsel = b01;
+        we = b1;
+        statedff.d = regfiledataa;
+        state_counter.d = 6;  // show which state we are in                               
+        regfile_read_address_a = b1011;
+        if(button){
+        game_fsm.d = game_fsm.RESET7;
+          }
+          else{
+          game_fsm.d = game_fsm.RESET6;
+        }
+        
+      game_fsm.RESET7:
+        regfile_write_address = b0111;
+        wdsel = 01;
+        we = 1;
+        statedff.d = regfiledataa;
+        state_counter.d = 7;  // show which state we are in                               
+        regfile_read_address_a = 1011;
+        if(button){
+        game_fsm.d = game_fsm.RESET8;
+          }
+          else{
+          game_fsm.d = game_fsm.RESET7;
+        }
+            
+      game_fsm.RESET8:
+        regfile_write_address = b1000;
+        wdsel = b01;
+        we = b1;
+        state_counter.d = 8;  // show which state we are in                               
+        // state test
+        statedff.d = regfiledataa;
+        regfile_read_address_a = b1011;
+        if(button){
+        game_fsm.d = game_fsm.INCREASELINE;
+          }
+          else{
+          game_fsm.d = game_fsm.RESET8;
+        }
+        
+          
+      game_fsm.INCREASELINE:
+        
+       // move up one line 
+          
+       //store our line counter in reg 11; 
+       regfile_read_address_a = b1011;
+       //statedff.d = regfiledataa;
+       regfile_write_address = b1011;
+       alufn = b000000;
+       asel = b00;
+       bsel = b01;
+       we = b1;
+        state_counter.d = 9;  // show which state we are in                                         
+       // state test
+       statedff.d = regfiledataa;
+       regfile_read_address_a = b1011;
+       if(button){
+       game_fsm.d = game_fsm.DETERMINENEXT;
+          }
+          else{
+          game_fsm.d = game_fsm.INCREASELINE;
+        }
+          
+     game_fsm.DETERMINENEXT:
+        // determine which line we are at by reading from reg 11
+        // we will be at line 
+        regfile_read_address_b = b1011;
+        statedff.d = regfiledatab;
+        state_counter.d = 10;  // show which state we are in                                                   
+        if(button){
+        if (regfiledatab == 16h0001) { // we are at line 1 
+            game_fsm.d = game_fsm.LINE1;
+        } else if (regfiledatab == 16h0002) { //we are line 2 
+            game_fsm.d = game_fsm.LINE2;
+        } else if (regfiledatab == 16h0003) {
+            game_fsm.d = game_fsm.LINE3;
+        } else if (regfiledatab == 16h0004) {
+            game_fsm.d = game_fsm.LINE4;
+        } else if (regfiledatab == 16h0005) {
+            game_fsm.d = game_fsm.LINE5;
+        } else if (regfiledatab == 16h0006) {
+            game_fsm.d = game_fsm.LINE6;
+        } else if (regfiledatab == 16h0007) {
+            game_fsm.d = game_fsm.LINE7;
+        } else if (regfiledatab == 16h0008) {
+            game_fsm.d = game_fsm.LINE8;
+        }
+          }
+          else{
+          game_fsm.d = game_fsm.DETERMINENEXT;
+        }
+        
+      game_fsm.LINE1:
+        alufn = b000000;
+        we = b1;
+        regfile_write_address = b0001; // write to r9 the value of the current line, which implicitly holds the width of our block
+        regfile_read_address_a = b1001;
+        asel = b00;
+          
+        // state test
+        statedff.d = b00001110;
+        state_counter.d = 11;  // show which state we are in                                                   
+          
+        // increase line as we are always safe on line 1
+        if (button){
+          game_fsm.d = game_fsm.INCREASELINE;
+        }
+        else{
+          game_fsm.d = game_fsm.SHIFTL1;
+        }
+        
+      game_fsm.LINE2:
+        alufn = b000000;
+        asel = b00;
+        we = b1;
+        regfile_write_address = b0010; // write the width of our block to r2 
+        regfile_read_address_a = b1001;// read from r9 the width of our block 
+        state_counter.d = 12;  // show which state we are in                                                   
+        if (button){ 
+          // button press for implementing the stack 
+          game_fsm.d = game_fsm.CHECK2;
+        }
+        else{ // go to shift left 2 for animation
+          game_fsm.d = game_fsm.SHIFTL2;
+        }
+        
+     game_fsm.LINE3:
+        alufn = b000000;
+        asel = b00;
+        we = b1;
+        regfile_write_address = b0011;
+        regfile_read_address_a = b1001;
+        state_counter.d = 13;  // show which state we are in                                                   
+
+        if (button){
+          game_fsm.d = game_fsm.CHECK3;
+        }
+        else{
+          game_fsm.d = game_fsm.SHIFTL3;
+        }
+     
+     game_fsm.LINE4:
+        alufn = b000000;
+        asel = b00;
+        we = b1;
+        regfile_write_address = b0100;
+        regfile_read_address_a = b1001;
+        state_counter.d = 14;  // show which state we are in                                                   
+
+        if (button){
+          game_fsm.d = game_fsm.CHECK4;
+        }
+        else{
+          game_fsm.d = game_fsm.SHIFTL4;
+        }
+        
+     game_fsm.LINE5:
+        alufn = b000000;
+        asel = b00;
+        we = b1;
+        regfile_write_address = b0101;
+        regfile_read_address_a = b1001;
+        state_counter.d = 15;  // show which state we are in                                                   
+
+        if (button){
+          game_fsm.d = game_fsm.CHECK5;
+        }
+        else{
+          game_fsm.d = game_fsm.SHIFTL5;
+        }
+     
+      game_fsm.LINE6:
+        alufn = b000000;
+        asel = b00;
+        we = b1;
+        regfile_write_address = b0110;
+        regfile_read_address_a = b1001;
+        state_counter.d = 16;  // show which state we are in                                                   
+
+        if (button){
+          game_fsm.d = game_fsm.CHECK6;
+        }
+        else{
+          game_fsm.d = game_fsm.SHIFTL6;
+        }
+        
+      game_fsm.LINE7:
+        alufn = b000000;
+        asel = b00;
+        we = b1;
+        regfile_write_address = b0111;
+        regfile_read_address_a = b1001;
+        state_counter.d = 17;  // show which state we are in                                                   
+
+        if (button){
+          game_fsm.d = game_fsm.CHECK7;
+        }
+        else{
+          game_fsm.d = game_fsm.SHIFTL7;
+        }
+        
+      game_fsm.LINE8:
+        alufn = b000000;
+        asel = b0;
+        we = b1;
+        regfile_write_address = b1000;
+        regfile_read_address_a = b1001;
+        state_counter.d = 18;  // show which state we are in                                                             
+
+        if (button){
+          game_fsm.d = game_fsm.CHECK8;
+        }
+        else{
+          game_fsm.d = game_fsm.SHIFTL8;
+        }
+        
+      game_fsm.LOSE:
+        wdsel = b01;
+        regfile_write_address = b0000;
+        we = b1;
+        state_counter.d = 19;  // show which state we are in                                                   
+
+        if (button){
+          game_fsm.d = game_fsm.IDLE; // hold the screen and until press button
+        }
+        else{
+          game_fsm.d = game_fsm.LOSE;
+        }
+        
+      game_fsm.CHECK2:
+        // AND function to get the width of the remaining stacker block
+        // and write to r9 the width of remaining block
+        alufn = b011000;
+        regfile_read_address_a = b0010;
+        regfile_read_address_b = b0001;
+        regfile_write_address = b1001;
+        we = b1;
+        asel = b00;
+        bsel = b00;
+        state_counter.d = 20;  // show which state we are in                                                   
+        
+        game_fsm.d = game_fsm.CHECKLOSE;
+          
+     game_fsm.CHECK3:
+        alufn = b011000;
+        regfile_read_address_a = b0011;
+        regfile_read_address_b = b0010;
+        regfile_write_address = b1001;
+        we = b1;
+        asel = b00;
+        bsel = b00;
+        state_counter.d = 21;  // show which state we are in                                                   
+        
+        game_fsm.d = game_fsm.CHECKLOSE;
+             
+     game_fsm.CHECK4:
+        alufn = b011000;
+        regfile_read_address_a = b0100;
+        regfile_read_address_b = b0011;
+        regfile_write_address = b1001;
+        we = b1;
+        asel = b00;
+        bsel = b00;
+        state_counter.d = 22;  // show which state we are in                                                   
+        
+        game_fsm.d = game_fsm.CHECKLOSE;
+          
+     game_fsm.CHECK5:
+        alufn = b011000;
+        regfile_read_address_a = b0101;
+        regfile_read_address_b = b0100;
+        regfile_write_address = b1001;
+        we = b1;
+        asel = b00;
+        bsel = b00;
+        state_counter.d = 23;  // show which state we are in                                                   
+        
+        game_fsm.d = game_fsm.CHECKLOSE;
+             
+     game_fsm.CHECK6:
+        alufn = b011000;
+        regfile_read_address_a = b0110;
+        regfile_read_address_b = b0100;
+        regfile_write_address = b1001;
+        we = b1;
+        asel = b00;
+        bsel = b00;
+        state_counter.d = 24;  // show which state we are in                                                   
+        
+        game_fsm.d = game_fsm.CHECKLOSE;
+          
+     game_fsm.CHECK7:
+        alufn = b011000;
+        regfile_read_address_a = b0111;
+        regfile_read_address_b = b0110;
+        regfile_write_address = b1001;
+        we = b1;
+        asel = b00;
+        bsel = b00;
+        state_counter.d = 25;  // show which state we are in                                                   
+        
+        game_fsm.d = game_fsm.CHECKLOSE;
+             
+     game_fsm.CHECK8:
+        alufn = b011000;
+        regfile_read_address_a = b1000;
+        regfile_read_address_b = b0111;
+        regfile_write_address = b1001;
+        we = b1;
+        asel = b00;
+        bsel = b00;
+        state_counter.d = 26;  // show which state we are in                                                   
+        
+        game_fsm.d = game_fsm.CHECKLOSE;
+          
+     game_fsm.CHECKLOSE:
+        // we read from r9, is the overlapping part. 
+         // check if it is 0, meaning we do not have anything left.
+          // so if we lose 
+        regfile_read_address_b = b1001;
+        regfile_read_address_a = b1011;
+        
+        if (regfiledatab == 16h0000) {
+          game_fsm.d = game_fsm.LOSE; //we lose if it is 0
+        }
+        else if (regfiledataa == 16h0008) {
+            game_fsm.d = game_fsm.LEVELUP; // if we dont lose but reach end of the level
+        } else {
+          game_fsm.d = game_fsm.INCREASELINE; // if we have not finish the block, we go to the next line
+        }
+        state_counter.d = 27;  // show which state we are in                                                   
+
+      game_fsm.SHIFTL1:
+        regfile_read_address_b = b0001;
+        
+        // state test
+        //statedff.d = b01111110;
+              
+        if(button){
+          game_fsm.d = game_fsm.INCREASELINE;
+        } else if (regfiledatab[7] == b1){ 
+            game_fsm.d = game_fsm.SHIFTR1;
+        } else {
+            alufn = b100000;
+            regfile_read_address_a = b0001;
+            regfile_write_address = b0001;
+            bsel = b01;
+            we = b1;
+        state_counter.d = 28;  // show which state we are in                                                   
+          
+            game_fsm.d = game_fsm.SHIFTL1;
+        }
+      
+      game_fsm.SHIFTL2:
+        regfile_read_address_b = b0010; // read r2 which our line 
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK2; // implement the stack
+        } else if (regfiledatab[7] == b1){   //hit the left edge go to shift left
+            game_fsm.d = game_fsm.SHIFTR2;
+        } else {
+            alufn = b100000;  // else we can move left, so we shift left by 1 value. 
+            regfile_read_address_a = b0010;
+            regfile_write_address = b0010; // write r2 with new value
+            bsel = b01;
+            we = b1;
+        state_counter.d = 29;  // show which state we are in                                                   
+          
+            game_fsm.d = game_fsm.SHIFTL2;
+        }
+            
+      game_fsm.SHIFTL3:
+        regfile_read_address_b = b0011;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK3;
+        } else if (regfiledatab[7] == b1){ 
+            game_fsm.d = game_fsm.SHIFTR3;
+        } else {
+            alufn = b100000;
+            regfile_read_address_a = b0011;
+            regfile_write_address = b0011;
+            bsel = b01;
+            we = b1;
+        state_counter.d = 30;  // show which state we are in                                                   
+          
+            game_fsm.d = game_fsm.SHIFTL3;
+        }
+        
+      game_fsm.SHIFTL4:
+        regfile_read_address_b = b0100;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK4;
+        } else if (regfiledatab[7] == b1){ 
+            game_fsm.d = game_fsm.SHIFTR1;
+        } else {
+            alufn = b100000;
+            regfile_read_address_a = b0100;
+            regfile_write_address = b0100;
+            bsel = b01;
+            we = b1;
+        state_counter.d = 31;  // show which state we are in                                                             
+            game_fsm.d = game_fsm.SHIFTL4;
+        }
+      
+      game_fsm.SHIFTL5:
+        regfile_read_address_b = b0101;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK5;
+        } else if (regfiledatab[7] == b1){ 
+            game_fsm.d = game_fsm.SHIFTR5;
+        } else {
+            alufn = b100000;
+            regfile_read_address_a = b0101;
+            regfile_write_address = b0101;
+            bsel = b01;
+            we = b1;
+        state_counter.d = 32;  // show which state we are in                                                   
+          
+          game_fsm.d = game_fsm.SHIFTL5;
+        }
+            
+      game_fsm.SHIFTL6:
+        regfile_read_address_b = b0110;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK6;
+        } else if (regfiledatab[7] == b1){ 
+              game_fsm.d = game_fsm.SHIFTR6;
+        } else {
+            alufn = b100000;
+            regfile_read_address_a = b0110;
+            regfile_write_address = b0110;
+            bsel = b01;
+            we = b1;
+        state_counter.d = 33;  // show which state we are in                                                   
+          
+            game_fsm.d = game_fsm.SHIFTL6;
+        }
+      
+      game_fsm.SHIFTL7:
+        regfile_read_address_b = 0111;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK7;
+        } else if (regfiledatab[7] == b1){ 
+            game_fsm.d = game_fsm.SHIFTR7;
+        } else {
+            alufn = b100000;
+            regfile_read_address_a = b0111;
+            regfile_write_address = b0111;
+            bsel = b01;
+            we = b1;
+        state_counter.d = 34;  // show which state we are in                                                   
+          
+            game_fsm.d = game_fsm.SHIFTL7;
+        }
+            
+      game_fsm.SHIFTL8:
+        regfile_read_address_b = 1000;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK8;
+        } else if (regfiledatab[7] == b1){ 
+            game_fsm.d = game_fsm.SHIFTR8;
+        } else {
+            alufn = b100000;
+            regfile_read_address_a = b1000;
+            regfile_write_address = b1000;
+            bsel = b01;
+            asel = b00;
+            we = b1;
+        state_counter.d = 35;  // show which state we are in                                                   
+                      
+            game_fsm.d = game_fsm.SHIFTL8;
+        }
+              
+      game_fsm.SHIFTR1:
+        regfile_read_address_b = 0001;
+              
+        if(button){
+          game_fsm.d = game_fsm.INCREASELINE;
+        } else if (regfiledatab[0] == b1){ 
+            game_fsm.d = game_fsm.SHIFTL1;
+        } else {
+            alufn = b100001;
+            regfile_read_address_a = b0001;
+            regfile_write_address = b0001;
+            bsel = b01;
+            we = b1;
+        state_counter.d = 36;  // show which state we are in                                                   
+          
+            game_fsm.d = game_fsm.SHIFTR1;
+        }
+      
+      game_fsm.SHIFTR2:
+        regfile_read_address_b = b0010;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK2;
+        } else if (regfiledatab[0] == b1){ 
+            game_fsm.d = game_fsm.SHIFTL2;
+        } else {
+          alufn = b100001;
+          regfile_read_address_a = b0010;
+          regfile_write_address = b0010;
+          bsel = b01;
+          we = b1;
+        state_counter.d = 37;  // show which state we are in                                                   
+          
+          game_fsm.d = game_fsm.SHIFTR2;
+        }
+            
+      game_fsm.SHIFTR3:
+        regfile_read_address_b = b0011;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK3;
+        } else if (regfiledatab[0] == b1){ 
+            game_fsm.d = game_fsm.SHIFTL3;
+        } else {
+          alufn = b100001;
+          regfile_read_address_a = b0011;
+          regfile_write_address = b0011;
+          bsel = b01;
+          we = b1;
+        state_counter.d = 38;  // show which state we are in                                                   
+          
+          game_fsm.d = game_fsm.SHIFTR3;
+        }
+        
+      game_fsm.SHIFTR4:
+        regfile_read_address_b = 0100;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK4;
+        } else if (regfiledatab[0] == b1){ 
+            game_fsm.d = game_fsm.SHIFTL1;
+        } else {
+          alufn = b100001;
+          regfile_read_address_a = b0100;
+          regfile_write_address = b0100;
+          bsel = b01;
+          we = b1;
+        state_counter.d = 39;  // show which state we are in                                                   
+          
+          game_fsm.d = game_fsm.SHIFTR4;
+        }
+      
+      game_fsm.SHIFTR5:
+        regfile_read_address_b = b0101;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK5;
+        } else if (regfiledatab[0] == b1){ 
+            game_fsm.d = game_fsm.SHIFTL5;
+        } else {
+          alufn = b100001;
+          regfile_read_address_a = b0101;
+          regfile_write_address = b0101;
+          bsel = b01;
+          we = b1;
+        state_counter.d = 40;  // show which state we are in                                                   
+            
+          
+          game_fsm.d = game_fsm.SHIFTR5;
+        }
+            
+      game_fsm.SHIFTR6:
+        regfile_read_address_b = b0110;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK6;
+        } else if (regfiledatab[0] == b1){ 
+            game_fsm.d = game_fsm.SHIFTL6;
+        } else {
+          alufn = b100001;
+          regfile_read_address_a = b0110;
+          regfile_write_address = b0110;
+          bsel = b01;
+          we = b1;
+        state_counter.d = 41;  // show which state we are in                                                   
+          
+          game_fsm.d = game_fsm.SHIFTR6;
+        }
+      
+      game_fsm.SHIFTR7:
+        regfile_read_address_b = b0111;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK7;
+        } else if (regfiledatab[0] == b1){ 
+              game_fsm.d = game_fsm.SHIFTL7;
+        } else {
+          alufn = b100001;
+          regfile_read_address_a = b0111;
+          regfile_write_address = b0111;
+          bsel = b01;
+          we = b1;
+        state_counter.d = 42;  // show which state we are in                                                   
+          
+          game_fsm.d = game_fsm.SHIFTR7;
+        }
+            
+      game_fsm.SHIFTR8:
+        regfile_read_address_b = b1000;
+              
+        if(button){
+          game_fsm.d = game_fsm.CHECK8;
+        } else if (regfiledatab[0] == b1){ 
+              game_fsm.d = game_fsm.SHIFTL8;
+        } else {
+          alufn = b100001;
+          regfile_read_address_a = b1000;
+          regfile_write_address = b1000;
+          bsel = b01;
+          asel = b00;
+          we = b1;
+        state_counter.d = 43;  // show which state we are in                                                   
+            
+          
+          game_fsm.d = game_fsm.SHIFTR8;
+        }
+        
+     game_fsm.LEVELUP:
+        alufn = b000000; 
+        regfile_read_address_a = b1001;
+        regfile_write_address = b0001; // go to line 1 and writing r9 to line 1 
+        asel = b00;
+        bsel = b00;
+        we = b1;
+        state_counter.d = 44;  // show which state we are in                                                   
+          
+        //KINDLY INCREASE THE SPEED
+        
+        game_fsm.d = game_fsm.INCREASESCORE;
+          
+     game_fsm.INCREASESCORE: // this is to set the constant for speed 
+        alufn = b000000;
+        regfile_read_address_a = b0000;
+        regfile_write_address = b0000;
+        asel = b00;
+        bsel = b01;
+        we = b1;
+        state_counter.d = 45;  // show which state we are in                                                   
+          
+        //KINDLY INCREASE THE SPEED
+        
+        game_fsm.d = game_fsm.RESETLINE;
+          
+          
+     game_fsm.RESETLINE:
+        regfile_write_address = b1011; // change line register be 1, r11, 
+        wdsel = b11;
+        
+        state_counter.d = 46;  // show which state we are in                                                   
+        game_fsm.d = game_fsm.RESET2;     // reset line 2 to 8, blanking them.
+        
+    }
+  }
+ }
+}

@@ -1,0 +1,37 @@
+module cu_test (
+    input clk,  // clock
+    input rst,  // reset
+    input button, // progress through each state 
+    input selector[2],
+    output out[16],
+    output counter_out[8]
+  ) {
+ // declare modules
+   .clk(clk) {
+    .rst(rst){
+      // register for value to print to segment
+      dff counter[8](#INIT(0));
+      game_beta cu;
+    }
+  }
+  always {
+    cu.button = button;
+    out = 16hf001;
+    case(selector){
+    b00: out = cu.wdsel_output; // check wdsel
+    b01 :out = cu.reg_eleven; // check reg 11 value 
+    b10: out = cu.statedebug; // check which state we are in
+    b11: out = cu.write_addr;  // see if we are writing to the correct address
+    }
+    if (button == 1) {
+      if (counter.q == b11111111) {
+        counter.d = 0;
+      } else {
+        counter.d = counter.q +1;
+      }
+    }
+    counter_out = counter.q;
+    
+    
+  }
+}
