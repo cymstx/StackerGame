@@ -4,7 +4,7 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module game_CU_12 (
+module game_CU_10 (
     input clk,
     input rst,
     input [15:0] regfiledatab,
@@ -102,7 +102,7 @@ module game_CU_12 (
           regfile_write_address = 4'h9;
           wdsel = 2'h1;
           we = 1'h1;
-          M_statedff_d = regfiledataa;
+          M_statedff_d = 16'hffff;
           regfile_read_address_a = 4'hb;
           M_state_counter_d = 1'h0;
           if (button) begin
@@ -118,102 +118,70 @@ module game_CU_12 (
           M_state_counter_d = 1'h1;
           M_statedff_d = regfiledataa;
           regfile_read_address_a = 4'hb;
-          if (button) begin
-            M_game_fsm_d = RESET2_game_fsm;
-          end else begin
-            M_game_fsm_d = SETSTART_game_fsm;
-          end
+          M_game_fsm_d = RESET2_game_fsm;
         end
         RESET2_game_fsm: begin
-          regfile_write_address = 4'ha;
-          wdsel = 1'h1;
+          regfile_write_address = 4'h2;
+          wdsel = 2'h1;
           we = 1'h1;
           M_statedff_d = regfiledataa;
-          regfile_read_address_a = 10'h3f3;
+          regfile_read_address_a = 4'hb;
           M_state_counter_d = 2'h2;
-          if (button) begin
-            M_game_fsm_d = RESET3_game_fsm;
-          end else begin
-            M_game_fsm_d = RESET2_game_fsm;
-          end
+          M_game_fsm_d = RESET3_game_fsm;
         end
         RESET3_game_fsm: begin
-          regfile_write_address = 4'hb;
-          wdsel = 1'h1;
+          regfile_write_address = 4'h3;
+          wdsel = 2'h1;
           we = 1'h1;
           M_statedff_d = regfiledataa;
-          regfile_read_address_a = 10'h3f3;
+          regfile_read_address_a = 4'hb;
           M_state_counter_d = 2'h3;
-          if (button) begin
-            M_game_fsm_d = RESET4_game_fsm;
-          end else begin
-            M_game_fsm_d = RESET3_game_fsm;
-          end
+          M_game_fsm_d = RESET4_game_fsm;
         end
         RESET4_game_fsm: begin
-          regfile_write_address = 7'h64;
-          wdsel = 1'h1;
+          regfile_write_address = 4'h4;
+          wdsel = 2'h1;
           we = 1'h1;
           M_statedff_d = regfiledataa;
-          regfile_read_address_a = 10'h3f3;
+          regfile_read_address_a = 4'hb;
           M_state_counter_d = 3'h4;
-          if (button) begin
-            M_game_fsm_d = RESET5_game_fsm;
-          end else begin
-            M_game_fsm_d = RESET4_game_fsm;
-          end
+          M_game_fsm_d = RESET5_game_fsm;
         end
         RESET5_game_fsm: begin
-          regfile_write_address = 7'h65;
-          wdsel = 1'h1;
+          regfile_write_address = 4'h5;
+          wdsel = 2'h1;
           we = 1'h1;
           M_statedff_d = regfiledataa;
-          regfile_read_address_a = 10'h3f3;
+          regfile_read_address_a = 4'hb;
           M_state_counter_d = 3'h5;
-          if (button) begin
-            M_game_fsm_d = RESET6_game_fsm;
-          end else begin
-            M_game_fsm_d = RESET5_game_fsm;
-          end
+          M_game_fsm_d = RESET6_game_fsm;
         end
         RESET6_game_fsm: begin
-          regfile_write_address = 7'h6e;
-          wdsel = 1'h1;
+          regfile_write_address = 4'h6;
+          wdsel = 2'h1;
           we = 1'h1;
           M_statedff_d = regfiledataa;
           M_state_counter_d = 3'h6;
-          regfile_read_address_a = 10'h3f3;
-          if (button) begin
-            M_game_fsm_d = RESET7_game_fsm;
-          end else begin
-            M_game_fsm_d = RESET6_game_fsm;
-          end
+          regfile_read_address_a = 4'hb;
+          M_game_fsm_d = RESET7_game_fsm;
         end
         RESET7_game_fsm: begin
-          regfile_write_address = 7'h6f;
+          regfile_write_address = 4'h7;
           wdsel = 1'h1;
           we = 1'h1;
           M_statedff_d = regfiledataa;
           M_state_counter_d = 3'h7;
           regfile_read_address_a = 10'h3f3;
-          if (button) begin
-            M_game_fsm_d = RESET8_game_fsm;
-          end else begin
-            M_game_fsm_d = RESET7_game_fsm;
-          end
+          M_game_fsm_d = RESET8_game_fsm;
         end
         RESET8_game_fsm: begin
-          regfile_write_address = 10'h3e8;
-          wdsel = 1'h1;
+          regfile_write_address = 4'h8;
+          wdsel = 2'h1;
           we = 1'h1;
           M_state_counter_d = 4'h8;
           M_statedff_d = regfiledataa;
-          regfile_read_address_a = 10'h3f3;
-          if (button) begin
-            M_game_fsm_d = INCREASELINE_game_fsm;
-          end else begin
-            M_game_fsm_d = RESET8_game_fsm;
-          end
+          regfile_read_address_a = 4'hb;
+          M_game_fsm_d = INCREASELINE_game_fsm;
         end
         INCREASELINE_game_fsm: begin
           regfile_read_address_a = 4'hb;
@@ -224,42 +192,36 @@ module game_CU_12 (
           we = 1'h1;
           M_state_counter_d = 4'h9;
           M_statedff_d = regfiledataa;
-          regfile_read_address_a = 10'h3f3;
-          if (button) begin
-            M_game_fsm_d = DETERMINENEXT_game_fsm;
-          end else begin
-            M_game_fsm_d = INCREASELINE_game_fsm;
-          end
+          regfile_read_address_a = 4'hb;
+          M_game_fsm_d = DETERMINENEXT_game_fsm;
         end
         DETERMINENEXT_game_fsm: begin
-          regfile_read_address_b = 10'h3f3;
+          regfile_read_address_b = 4'hb;
           M_statedff_d = regfiledatab;
           M_state_counter_d = 4'ha;
-          if (button) begin
-            if (regfiledatab == 16'h0001) begin
-              M_game_fsm_d = LINE1_game_fsm;
+          if (regfiledatab == 16'h0001) begin
+            M_game_fsm_d = LINE1_game_fsm;
+          end else begin
+            if (regfiledatab == 16'h0002) begin
+              M_game_fsm_d = LINE2_game_fsm;
             end else begin
-              if (regfiledatab == 16'h0002) begin
-                M_game_fsm_d = LINE2_game_fsm;
+              if (regfiledatab == 16'h0003) begin
+                M_game_fsm_d = LINE3_game_fsm;
               end else begin
-                if (regfiledatab == 16'h0003) begin
-                  M_game_fsm_d = LINE3_game_fsm;
+                if (regfiledatab == 16'h0004) begin
+                  M_game_fsm_d = LINE4_game_fsm;
                 end else begin
-                  if (regfiledatab == 16'h0004) begin
-                    M_game_fsm_d = LINE4_game_fsm;
+                  if (regfiledatab == 16'h0005) begin
+                    M_game_fsm_d = LINE5_game_fsm;
                   end else begin
-                    if (regfiledatab == 16'h0005) begin
-                      M_game_fsm_d = LINE5_game_fsm;
+                    if (regfiledatab == 16'h0006) begin
+                      M_game_fsm_d = LINE6_game_fsm;
                     end else begin
-                      if (regfiledatab == 16'h0006) begin
-                        M_game_fsm_d = LINE6_game_fsm;
+                      if (regfiledatab == 16'h0007) begin
+                        M_game_fsm_d = LINE7_game_fsm;
                       end else begin
-                        if (regfiledatab == 16'h0007) begin
-                          M_game_fsm_d = LINE7_game_fsm;
-                        end else begin
-                          if (regfiledatab == 16'h0008) begin
-                            M_game_fsm_d = LINE8_game_fsm;
-                          end
+                        if (regfiledatab == 16'h0008) begin
+                          M_game_fsm_d = LINE8_game_fsm;
                         end
                       end
                     end
@@ -267,16 +229,14 @@ module game_CU_12 (
                 end
               end
             end
-          end else begin
-            M_game_fsm_d = DETERMINENEXT_game_fsm;
           end
         end
         LINE1_game_fsm: begin
           alufn = 6'h00;
           we = 1'h1;
-          regfile_write_address = 1'h1;
-          regfile_read_address_a = 10'h3e9;
-          asel = 1'h0;
+          regfile_write_address = 4'h1;
+          regfile_read_address_a = 4'h9;
+          asel = 2'h0;
           M_statedff_d = 8'h0e;
           M_state_counter_d = 4'hb;
           if (button) begin
@@ -287,10 +247,11 @@ module game_CU_12 (
         end
         LINE2_game_fsm: begin
           alufn = 6'h00;
-          asel = 1'h0;
+          asel = 2'h0;
           we = 1'h1;
-          regfile_write_address = 4'ha;
-          regfile_read_address_a = 10'h3e9;
+          regfile_write_address = 4'h2;
+          regfile_read_address_a = 4'h9;
+          M_state_counter_d = 4'hc;
           if (button) begin
             M_game_fsm_d = CHECK2_game_fsm;
           end else begin
@@ -299,10 +260,11 @@ module game_CU_12 (
         end
         LINE3_game_fsm: begin
           alufn = 6'h00;
-          asel = 1'h0;
+          asel = 2'h0;
           we = 1'h1;
-          regfile_write_address = 4'hb;
-          regfile_read_address_a = 10'h3e9;
+          regfile_write_address = 4'h3;
+          regfile_read_address_a = 4'h9;
+          M_state_counter_d = 4'hd;
           if (button) begin
             M_game_fsm_d = CHECK3_game_fsm;
           end else begin
@@ -311,10 +273,11 @@ module game_CU_12 (
         end
         LINE4_game_fsm: begin
           alufn = 6'h00;
-          asel = 1'h0;
+          asel = 2'h0;
           we = 1'h1;
-          regfile_write_address = 7'h64;
-          regfile_read_address_a = 10'h3e9;
+          regfile_write_address = 4'h4;
+          regfile_read_address_a = 4'h9;
+          M_state_counter_d = 4'he;
           if (button) begin
             M_game_fsm_d = CHECK4_game_fsm;
           end else begin
@@ -323,10 +286,11 @@ module game_CU_12 (
         end
         LINE5_game_fsm: begin
           alufn = 6'h00;
-          asel = 1'h0;
+          asel = 2'h0;
           we = 1'h1;
-          regfile_write_address = 7'h65;
-          regfile_read_address_a = 10'h3e9;
+          regfile_write_address = 4'h5;
+          regfile_read_address_a = 4'h9;
+          M_state_counter_d = 4'hf;
           if (button) begin
             M_game_fsm_d = CHECK5_game_fsm;
           end else begin
@@ -335,10 +299,11 @@ module game_CU_12 (
         end
         LINE6_game_fsm: begin
           alufn = 6'h00;
-          asel = 1'h0;
+          asel = 2'h0;
           we = 1'h1;
-          regfile_write_address = 7'h6e;
-          regfile_read_address_a = 10'h3e9;
+          regfile_write_address = 4'h6;
+          regfile_read_address_a = 4'h9;
+          M_state_counter_d = 5'h10;
           if (button) begin
             M_game_fsm_d = CHECK6_game_fsm;
           end else begin
@@ -347,10 +312,11 @@ module game_CU_12 (
         end
         LINE7_game_fsm: begin
           alufn = 6'h00;
-          asel = 1'h0;
+          asel = 2'h0;
           we = 1'h1;
-          regfile_write_address = 7'h6f;
-          regfile_read_address_a = 10'h3e9;
+          regfile_write_address = 4'h7;
+          regfile_read_address_a = 4'h9;
+          M_state_counter_d = 5'h11;
           if (button) begin
             M_game_fsm_d = CHECK7_game_fsm;
           end else begin
@@ -361,8 +327,9 @@ module game_CU_12 (
           alufn = 6'h00;
           asel = 1'h0;
           we = 1'h1;
-          regfile_write_address = 10'h3e8;
-          regfile_read_address_a = 10'h3e9;
+          regfile_write_address = 4'h8;
+          regfile_read_address_a = 4'h9;
+          M_state_counter_d = 5'h12;
           if (button) begin
             M_game_fsm_d = CHECK8_game_fsm;
           end else begin
@@ -370,9 +337,10 @@ module game_CU_12 (
           end
         end
         LOSE_game_fsm: begin
-          wdsel = 1'h1;
-          regfile_write_address = 1'h0;
+          wdsel = 2'h1;
+          regfile_write_address = 4'h0;
           we = 1'h1;
+          M_state_counter_d = 5'h13;
           if (button) begin
             M_game_fsm_d = IDLE_game_fsm;
           end else begin
@@ -380,78 +348,85 @@ module game_CU_12 (
           end
         end
         CHECK2_game_fsm: begin
-          alufn = 6'h08;
-          regfile_read_address_a = 4'ha;
-          regfile_read_address_b = 1'h1;
-          regfile_write_address = 10'h3e9;
+          alufn = 6'h18;
+          regfile_read_address_a = 4'h2;
+          regfile_read_address_b = 4'h1;
+          regfile_write_address = 4'h9;
           we = 1'h1;
-          asel = 1'h0;
-          bsel = 1'h0;
+          asel = 2'h0;
+          bsel = 2'h0;
+          M_state_counter_d = 5'h14;
           M_game_fsm_d = CHECKLOSE_game_fsm;
         end
         CHECK3_game_fsm: begin
-          alufn = 6'h08;
-          regfile_read_address_a = 4'hb;
-          regfile_read_address_b = 4'ha;
-          regfile_write_address = 10'h3e9;
+          alufn = 6'h18;
+          regfile_read_address_a = 4'h3;
+          regfile_read_address_b = 4'h2;
+          regfile_write_address = 4'h9;
           we = 1'h1;
-          asel = 1'h0;
-          bsel = 1'h0;
+          asel = 2'h0;
+          bsel = 2'h0;
+          M_state_counter_d = 5'h15;
           M_game_fsm_d = CHECKLOSE_game_fsm;
         end
         CHECK4_game_fsm: begin
-          alufn = 6'h08;
-          regfile_read_address_a = 7'h64;
-          regfile_read_address_b = 4'hb;
-          regfile_write_address = 10'h3e9;
+          alufn = 6'h18;
+          regfile_read_address_a = 4'h4;
+          regfile_read_address_b = 4'h3;
+          regfile_write_address = 4'h9;
           we = 1'h1;
-          asel = 1'h0;
-          bsel = 1'h0;
+          asel = 2'h0;
+          bsel = 2'h0;
+          M_state_counter_d = 5'h16;
           M_game_fsm_d = CHECKLOSE_game_fsm;
         end
         CHECK5_game_fsm: begin
-          alufn = 6'h08;
-          regfile_read_address_a = 7'h65;
-          regfile_read_address_b = 7'h64;
-          regfile_write_address = 10'h3e9;
+          alufn = 6'h18;
+          regfile_read_address_a = 4'h5;
+          regfile_read_address_b = 4'h4;
+          regfile_write_address = 4'h9;
           we = 1'h1;
-          asel = 1'h0;
-          bsel = 1'h0;
+          asel = 2'h0;
+          bsel = 2'h0;
+          M_state_counter_d = 5'h17;
           M_game_fsm_d = CHECKLOSE_game_fsm;
         end
         CHECK6_game_fsm: begin
-          alufn = 6'h08;
-          regfile_read_address_a = 7'h6e;
-          regfile_read_address_b = 7'h64;
-          regfile_write_address = 10'h3e9;
+          alufn = 6'h18;
+          regfile_read_address_a = 4'h6;
+          regfile_read_address_b = 4'h4;
+          regfile_write_address = 4'h9;
           we = 1'h1;
-          asel = 1'h0;
-          bsel = 1'h0;
+          asel = 2'h0;
+          bsel = 2'h0;
+          M_state_counter_d = 5'h18;
           M_game_fsm_d = CHECKLOSE_game_fsm;
         end
         CHECK7_game_fsm: begin
-          alufn = 6'h08;
-          regfile_read_address_a = 7'h6f;
-          regfile_read_address_b = 7'h6e;
-          regfile_write_address = 10'h3e9;
+          alufn = 6'h18;
+          regfile_read_address_a = 4'h7;
+          regfile_read_address_b = 4'h6;
+          regfile_write_address = 4'h9;
           we = 1'h1;
-          asel = 1'h0;
-          bsel = 1'h0;
+          asel = 2'h0;
+          bsel = 2'h0;
+          M_state_counter_d = 5'h19;
           M_game_fsm_d = CHECKLOSE_game_fsm;
         end
         CHECK8_game_fsm: begin
-          alufn = 6'h08;
-          regfile_read_address_a = 10'h3e8;
-          regfile_read_address_b = 7'h6f;
-          regfile_write_address = 10'h3e9;
+          alufn = 6'h18;
+          regfile_read_address_a = 4'h8;
+          regfile_read_address_b = 4'h7;
+          regfile_write_address = 4'h9;
           we = 1'h1;
-          asel = 1'h0;
-          bsel = 1'h0;
+          asel = 2'h0;
+          bsel = 2'h0;
+          M_state_counter_d = 5'h1a;
           M_game_fsm_d = CHECKLOSE_game_fsm;
         end
         CHECKLOSE_game_fsm: begin
-          regfile_read_address_b = 10'h3e9;
-          regfile_read_address_a = 10'h3f3;
+          regfile_read_address_b = 4'h9;
+          regfile_read_address_a = 4'hb;
           if (regfiledatab == 16'h0000) begin
             M_game_fsm_d = LOSE_game_fsm;
           end else begin
@@ -461,105 +436,119 @@ module game_CU_12 (
               M_game_fsm_d = INCREASELINE_game_fsm;
             end
           end
+          M_state_counter_d = 5'h1b;
         end
         SHIFTL1_game_fsm: begin
-          regfile_read_address_b = 1'h1;
+          regfile_read_address_b = 4'h1;
+          M_statedff_d = 16'h00ff;
           if (button) begin
             M_game_fsm_d = INCREASELINE_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[7+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTR1_game_fsm;
             end else begin
               alufn = 6'h20;
-              regfile_read_address_a = 1'h1;
-              regfile_write_address = 1'h1;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h1;
+              regfile_write_address = 4'h1;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 5'h1c;
               M_game_fsm_d = SHIFTL1_game_fsm;
             end
           end
         end
         SHIFTL2_game_fsm: begin
-          regfile_read_address_b = 4'ha;
+          regfile_read_address_b = 4'h2;
           if (button) begin
             M_game_fsm_d = CHECK2_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[7+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTR2_game_fsm;
             end else begin
               alufn = 6'h20;
-              regfile_read_address_a = 4'ha;
-              regfile_write_address = 4'ha;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h2;
+              regfile_write_address = 4'h2;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 5'h1d;
               M_game_fsm_d = SHIFTL2_game_fsm;
             end
           end
         end
         SHIFTL3_game_fsm: begin
-          regfile_read_address_b = 4'hb;
+          regfile_read_address_b = 4'h3;
           if (button) begin
             M_game_fsm_d = CHECK3_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[7+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTR3_game_fsm;
             end else begin
               alufn = 6'h20;
-              regfile_read_address_a = 4'hb;
-              regfile_write_address = 4'hb;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h3;
+              regfile_write_address = 4'h3;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 5'h1e;
               M_game_fsm_d = SHIFTL3_game_fsm;
             end
           end
         end
         SHIFTL4_game_fsm: begin
-          regfile_read_address_b = 7'h64;
+          regfile_read_address_b = 4'h4;
           if (button) begin
             M_game_fsm_d = CHECK4_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[7+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTR1_game_fsm;
             end else begin
               alufn = 6'h20;
-              regfile_read_address_a = 7'h64;
-              regfile_write_address = 7'h64;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h4;
+              regfile_write_address = 4'h4;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 5'h1f;
               M_game_fsm_d = SHIFTL4_game_fsm;
             end
           end
         end
         SHIFTL5_game_fsm: begin
-          regfile_read_address_b = 7'h65;
+          regfile_read_address_b = 4'h5;
           if (button) begin
             M_game_fsm_d = CHECK5_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[7+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTR5_game_fsm;
             end else begin
               alufn = 6'h20;
-              regfile_read_address_a = 7'h65;
-              regfile_write_address = 7'h65;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h5;
+              regfile_write_address = 4'h5;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h20;
               M_game_fsm_d = SHIFTL5_game_fsm;
             end
           end
         end
         SHIFTL6_game_fsm: begin
-          regfile_read_address_b = 7'h6e;
+          regfile_read_address_b = 4'h6;
           if (button) begin
             M_game_fsm_d = CHECK6_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[7+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTR6_game_fsm;
             end else begin
               alufn = 6'h20;
-              regfile_read_address_a = 7'h6e;
-              regfile_write_address = 7'h6e;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h6;
+              regfile_write_address = 4'h6;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h21;
               M_game_fsm_d = SHIFTL6_game_fsm;
             end
           end
@@ -569,14 +558,16 @@ module game_CU_12 (
           if (button) begin
             M_game_fsm_d = CHECK7_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[7+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTR7_game_fsm;
             end else begin
               alufn = 6'h20;
-              regfile_read_address_a = 7'h6f;
-              regfile_write_address = 7'h6f;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h7;
+              regfile_write_address = 4'h7;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h22;
               M_game_fsm_d = SHIFTL7_game_fsm;
             end
           end
@@ -586,15 +577,16 @@ module game_CU_12 (
           if (button) begin
             M_game_fsm_d = CHECK8_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[7+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTR8_game_fsm;
             end else begin
               alufn = 6'h20;
-              regfile_read_address_a = 10'h3e8;
-              regfile_write_address = 10'h3e8;
-              bsel = 1'h1;
-              asel = 1'h0;
+              regfile_read_address_a = 4'h8;
+              regfile_write_address = 4'h8;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h23;
               M_game_fsm_d = SHIFTL8_game_fsm;
             end
           end
@@ -604,48 +596,54 @@ module game_CU_12 (
           if (button) begin
             M_game_fsm_d = INCREASELINE_game_fsm;
           end else begin
-            if (regfiledatab == 1'h1) begin
+            if (regfiledatab[0+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTL1_game_fsm;
             end else begin
               alufn = 6'h21;
-              regfile_read_address_a = 1'h1;
-              regfile_write_address = 1'h1;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h1;
+              regfile_write_address = 4'h1;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h24;
               M_game_fsm_d = SHIFTR1_game_fsm;
             end
           end
         end
         SHIFTR2_game_fsm: begin
-          regfile_read_address_b = 4'ha;
+          regfile_read_address_b = 4'h2;
           if (button) begin
             M_game_fsm_d = CHECK2_game_fsm;
           end else begin
-            if (regfiledatab == 1'h1) begin
+            if (regfiledatab[0+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTL2_game_fsm;
             end else begin
               alufn = 6'h21;
-              regfile_read_address_a = 4'ha;
-              regfile_write_address = 4'ha;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h2;
+              regfile_write_address = 4'h2;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h25;
               M_game_fsm_d = SHIFTR2_game_fsm;
             end
           end
         end
         SHIFTR3_game_fsm: begin
-          regfile_read_address_b = 4'hb;
+          regfile_read_address_b = 4'h3;
           if (button) begin
             M_game_fsm_d = CHECK3_game_fsm;
           end else begin
-            if (regfiledatab == 1'h1) begin
+            if (regfiledatab[0+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTL3_game_fsm;
             end else begin
               alufn = 6'h21;
-              regfile_read_address_a = 4'hb;
-              regfile_write_address = 4'hb;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h3;
+              regfile_write_address = 4'h3;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h26;
               M_game_fsm_d = SHIFTR3_game_fsm;
             end
           end
@@ -655,108 +653,120 @@ module game_CU_12 (
           if (button) begin
             M_game_fsm_d = CHECK4_game_fsm;
           end else begin
-            if (regfiledatab == 24'h989680) begin
+            if (regfiledatab[0+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTL1_game_fsm;
             end else begin
               alufn = 6'h21;
-              regfile_read_address_a = 7'h64;
-              regfile_write_address = 7'h64;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h4;
+              regfile_write_address = 4'h4;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h27;
               M_game_fsm_d = SHIFTR4_game_fsm;
             end
           end
         end
         SHIFTR5_game_fsm: begin
-          regfile_read_address_b = 7'h65;
+          regfile_read_address_b = 4'h5;
           if (button) begin
             M_game_fsm_d = CHECK5_game_fsm;
           end else begin
-            if (regfiledatab == 1'h1) begin
+            if (regfiledatab[0+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTL5_game_fsm;
             end else begin
               alufn = 6'h21;
-              regfile_read_address_a = 7'h65;
-              regfile_write_address = 7'h65;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h5;
+              regfile_write_address = 4'h5;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h28;
               M_game_fsm_d = SHIFTR5_game_fsm;
             end
           end
         end
         SHIFTR6_game_fsm: begin
-          regfile_read_address_b = 7'h6e;
+          regfile_read_address_b = 4'h6;
           if (button) begin
             M_game_fsm_d = CHECK6_game_fsm;
           end else begin
-            if (regfiledatab == 1'h1) begin
+            if (regfiledatab[0+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTL6_game_fsm;
             end else begin
               alufn = 6'h21;
-              regfile_read_address_a = 7'h6e;
-              regfile_write_address = 7'h6e;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h6;
+              regfile_write_address = 4'h6;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h29;
               M_game_fsm_d = SHIFTR6_game_fsm;
             end
           end
         end
         SHIFTR7_game_fsm: begin
-          regfile_read_address_b = 7'h6f;
+          regfile_read_address_b = 4'h7;
           if (button) begin
             M_game_fsm_d = CHECK7_game_fsm;
           end else begin
-            if (regfiledatab == 1'h1) begin
+            if (regfiledatab[0+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTL7_game_fsm;
             end else begin
               alufn = 6'h21;
-              regfile_read_address_a = 7'h6f;
-              regfile_write_address = 7'h6f;
-              bsel = 1'h1;
+              regfile_read_address_a = 4'h7;
+              regfile_write_address = 4'h7;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h2a;
               M_game_fsm_d = SHIFTR7_game_fsm;
             end
           end
         end
         SHIFTR8_game_fsm: begin
-          regfile_read_address_b = 10'h3e8;
+          regfile_read_address_b = 4'h8;
           if (button) begin
             M_game_fsm_d = CHECK8_game_fsm;
           end else begin
-            if (regfiledatab == 1'h1) begin
+            if (regfiledatab[0+0-:1] == 1'h1) begin
               M_game_fsm_d = SHIFTL8_game_fsm;
             end else begin
               alufn = 6'h21;
-              regfile_read_address_a = 10'h3e8;
-              regfile_write_address = 10'h3e8;
-              bsel = 1'h1;
-              asel = 1'h0;
+              regfile_read_address_a = 4'h8;
+              regfile_write_address = 4'h8;
+              bsel = 2'h1;
+              asel = 2'h0;
               we = 1'h1;
+              M_state_counter_d = 6'h2b;
               M_game_fsm_d = SHIFTR8_game_fsm;
             end
           end
         end
         LEVELUP_game_fsm: begin
           alufn = 6'h00;
-          regfile_read_address_a = 10'h3e9;
-          regfile_write_address = 1'h1;
-          asel = 1'h0;
-          bsel = 1'h0;
+          regfile_read_address_a = 4'h9;
+          regfile_write_address = 4'h1;
+          asel = 2'h0;
+          bsel = 2'h0;
           we = 1'h1;
+          M_state_counter_d = 6'h2c;
           M_game_fsm_d = INCREASESCORE_game_fsm;
         end
         INCREASESCORE_game_fsm: begin
           alufn = 6'h00;
-          regfile_read_address_a = 1'h0;
-          regfile_write_address = 1'h0;
-          asel = 1'h0;
-          bsel = 1'h1;
+          regfile_read_address_a = 4'h0;
+          regfile_write_address = 4'h0;
+          asel = 2'h0;
+          bsel = 2'h1;
           we = 1'h1;
+          M_state_counter_d = 6'h2d;
           M_game_fsm_d = RESETLINE_game_fsm;
         end
         RESETLINE_game_fsm: begin
-          regfile_write_address = 10'h3f3;
-          wdsel = 4'hb;
+          regfile_write_address = 4'hb;
+          wdsel = 2'h3;
+          M_state_counter_d = 6'h2e;
           M_game_fsm_d = RESET2_game_fsm;
         end
       endcase

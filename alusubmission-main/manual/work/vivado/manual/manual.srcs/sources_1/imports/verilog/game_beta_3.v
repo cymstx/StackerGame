@@ -11,7 +11,11 @@ module game_beta_3 (
     output reg [15:0] score,
     output reg [15:0] positionl1,
     output reg [15:0] positionl2,
-    output reg debug_slowclock
+    output reg [15:0] reg_eleven,
+    output reg debug_slowclock,
+    output reg [15:0] statedebug,
+    output reg [15:0] wdsel_output,
+    output reg [3:0] write_addr
   );
   
   
@@ -20,26 +24,24 @@ module game_beta_3 (
   
   reg [15:0] inputAlu_b;
   
+  reg [15:0] wdsel;
+  
   wire [16-1:0] M_game_alu_s;
-  wire [1-1:0] M_game_alu_z;
-  wire [1-1:0] M_game_alu_v;
-  wire [1-1:0] M_game_alu_n;
+  wire [3-1:0] M_game_alu_zvn;
   reg [16-1:0] M_game_alu_x;
   reg [16-1:0] M_game_alu_y;
   reg [6-1:0] M_game_alu_op;
-  alu_7 game_alu (
+  alu_9 game_alu (
     .x(M_game_alu_x),
     .y(M_game_alu_y),
     .op(M_game_alu_op),
     .s(M_game_alu_s),
-    .z(M_game_alu_z),
-    .v(M_game_alu_v),
-    .n(M_game_alu_n)
+    .zvn(M_game_alu_zvn)
   );
   
   wire [1-1:0] M_game_timer_detector_out;
   reg [1-1:0] M_game_timer_detector_in;
-  edge_detector_8 game_timer_detector (
+  edge_detector_4 game_timer_detector (
     .clk(clk),
     .in(M_game_timer_detector_in),
     .out(M_game_timer_detector_out)
@@ -52,11 +54,12 @@ module game_beta_3 (
   wire [4-1:0] M_game_controlunit_regfile_write_address;
   wire [4-1:0] M_game_controlunit_regfile_read_address_a;
   wire [4-1:0] M_game_controlunit_regfile_read_address_b;
-  wire [4-1:0] M_game_controlunit_debug;
+  wire [16-1:0] M_game_controlunit_state;
+  wire [16-1:0] M_game_controlunit_debug;
   reg [16-1:0] M_game_controlunit_regfiledatab;
   reg [16-1:0] M_game_controlunit_regfiledataa;
   reg [1-1:0] M_game_controlunit_button;
-  game_CU_9 game_controlunit (
+  game_CU_10 game_controlunit (
     .clk(clk),
     .rst(rst),
     .regfiledatab(M_game_controlunit_regfiledatab),
@@ -70,6 +73,7 @@ module game_beta_3 (
     .regfile_write_address(M_game_controlunit_regfile_write_address),
     .regfile_read_address_a(M_game_controlunit_regfile_read_address_a),
     .regfile_read_address_b(M_game_controlunit_regfile_read_address_b),
+    .state(M_game_controlunit_state),
     .debug(M_game_controlunit_debug)
   );
   wire [16-1:0] M_players_out_a;
@@ -82,7 +86,7 @@ module game_beta_3 (
   reg [16-1:0] M_players_data;
   reg [4-1:0] M_players_read_address_a;
   reg [4-1:0] M_players_read_address_b;
-  game_miniRegfiles_10 players (
+  game_miniRegfiles_11 players (
     .clk(clk),
     .rst(rst),
     .write_address(M_players_write_address),
@@ -97,7 +101,7 @@ module game_beta_3 (
     .positionl2(M_players_positionl2)
   );
   wire [1-1:0] M_slow_timer_value;
-  counter_11 slow_timer (
+  counter_12 slow_timer (
     .clk(clk),
     .rst(rst),
     .value(M_slow_timer_value)
@@ -118,7 +122,7 @@ module game_beta_3 (
         inputAlu_a = M_players_out_a;
       end
       2'h1: begin
-        inputAlu_a = 1'h1;
+        inputAlu_a = 16'h0001;
       end
       default: begin
         inputAlu_a = 1'h0;
@@ -130,7 +134,7 @@ module game_beta_3 (
         inputAlu_b = M_players_out_b;
       end
       2'h1: begin
-        inputAlu_b = 1'h1;
+        inputAlu_b = 16'h0001;
       end
       default: begin
         inputAlu_b = 1'h0;
@@ -142,21 +146,26 @@ module game_beta_3 (
     
     case (M_game_controlunit_wdsel)
       2'h1: begin
-        M_players_data = 1'h0;
+        wdsel = 16'h0000;
       end
       2'h3: begin
-        M_players_data = 1'h1;
+        wdsel = 16'h0001;
       end
       2'h2: begin
-        M_players_data = 16'h000f;
+        wdsel = 16'h000f;
       end
       default: begin
-        M_players_data = M_game_alu_s;
+        wdsel = M_game_alu_s;
       end
     endcase
+    wdsel_output = wdsel;
+    M_players_data = wdsel;
     score = M_players_score;
     debug_slowclock = M_slow_timer_value;
     positionl1 = M_players_positionl1;
     positionl2 = M_players_positionl2;
+    reg_eleven = M_game_controlunit_state;
+    statedebug = M_game_controlunit_debug;
+    write_addr = M_game_controlunit_regfile_write_address;
   end
 endmodule

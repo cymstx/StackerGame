@@ -4,30 +4,32 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module boolean_14 (
+module boolean_15 (
     input [15:0] a,
     input [15:0] b,
-    input [5:0] op,
-    output reg [15:0] s
+    input [5:0] alufn_signal,
+    output reg [15:0] out
   );
   
   
   
   always @* begin
-    s = 1'h0;
     
-    case (op[0+3-:4])
+    case (alufn_signal[0+3-:4])
       4'h8: begin
-        s = a & b;
+        out = a & b;
       end
       4'he: begin
-        s = a | b;
+        out = a | b;
       end
-      3'h6: begin
-        s = a ^ b;
+      4'h6: begin
+        out = a ^ b;
       end
       4'ha: begin
-        s = a;
+        out = a;
+      end
+      default: begin
+        out = 16'h0000;
       end
     endcase
   end

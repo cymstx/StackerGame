@@ -31,16 +31,16 @@ module au_top (
         //dff store_s_wrong[1](#INIT(0),.clk(clk), .rst(rst));
       
         dff gamestate[16];
+        dff gameposition[16];
         //dff positionl1[8];
         //dff positionl2[8];
         //dff statedebugdff[8];
       // declare our module to address the segment         
       multi_seven_seg seg;
       // declare our test module
-      //game_beta gamebeta;
       //game_miniRegfiles regiletest;
-      //game_beta cu;
-      cu_test cu_test;
+      game_beta beta;
+      //cu_test cu_test;
     }
     
     edge_detector buttondetect(#RISE(1), #FALL(0));
@@ -56,14 +56,27 @@ module au_top (
     io_led = 3x{{8h00}};    // turn io LEDs off 
     
     // connect buttons
+    // john cu test ************************************************************************
+    //btn_cond.in = io_button[0];
+    //buttondetect.in = btn_cond.out;
+    //cu_test.button = buttondetect.out;
+    //gamestate.d = cu_test.out;
+    //cu_test.selector = io_dip[0][7:6]; // we are using the right bank left most two dips. 
+    //io_led[1][7:0] = cu_test.counter_out[7:0];
+    // end john cu test ***********************************************************************
+    
+    
+    // new test connect buttons
     btn_cond.in = io_button[0];
     buttondetect.in = btn_cond.out;
-    cu_test.button = buttondetect.out;
-    gamestate.d = cu_test.out;
-    cu_test.selector = io_dip[0][7:6]; // we are using the right bank left most two dips. 
-    io_led[1][7:0] = cu_test.counter_out[7:0];
+    beta.button = buttondetect.out;
+    gameposition.d = beta.positionl1;
+    gamestate.d = beta.reg_eleven;
     
+    io_led[0][7:0] = gameposition.q[7:0];
+    io_led[1][7:0] = gameposition.q[15:8];
     
+    // old test **********************************************
     //positionl1.d = gamebeta.positionl1;
     //positionl2.d = gamebeta.positionl2;
     //statedebugdff.d = gamebeta.statedebug;
@@ -86,7 +99,11 @@ module au_top (
     //regiletest.read_address_a = io_dip[0][3:0];
     //io_led[2][7:0] = regiletest.out_a[15:8];
     //io_led[1][7:0] = regiletest.out_a[7:0];
+    // end old test ********************************************
     
+    // new test *************************************************
+    
+    // end new test *********************************************
 
  
     

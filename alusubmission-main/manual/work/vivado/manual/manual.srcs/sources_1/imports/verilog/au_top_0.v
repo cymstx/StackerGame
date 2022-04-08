@@ -29,6 +29,7 @@ module au_top_0 (
     .out(M_reset_cond_out)
   );
   reg [15:0] M_gamestate_d, M_gamestate_q = 1'h0;
+  reg [15:0] M_gameposition_d, M_gameposition_q = 1'h0;
   wire [7-1:0] M_seg_seg;
   wire [4-1:0] M_seg_sel;
   reg [16-1:0] M_seg_values;
@@ -39,17 +40,27 @@ module au_top_0 (
     .seg(M_seg_seg),
     .sel(M_seg_sel)
   );
-  wire [16-1:0] M_cu_test_out;
-  wire [8-1:0] M_cu_test_counter_out;
-  reg [1-1:0] M_cu_test_button;
-  reg [2-1:0] M_cu_test_selector;
-  cu_test_3 cu_test (
+  wire [16-1:0] M_beta_score;
+  wire [16-1:0] M_beta_positionl1;
+  wire [16-1:0] M_beta_positionl2;
+  wire [16-1:0] M_beta_reg_eleven;
+  wire [1-1:0] M_beta_debug_slowclock;
+  wire [16-1:0] M_beta_statedebug;
+  wire [16-1:0] M_beta_wdsel_output;
+  wire [4-1:0] M_beta_write_addr;
+  reg [1-1:0] M_beta_button;
+  game_beta_3 beta (
     .clk(clk),
     .rst(rst),
-    .button(M_cu_test_button),
-    .selector(M_cu_test_selector),
-    .out(M_cu_test_out),
-    .counter_out(M_cu_test_counter_out)
+    .button(M_beta_button),
+    .score(M_beta_score),
+    .positionl1(M_beta_positionl1),
+    .positionl2(M_beta_positionl2),
+    .reg_eleven(M_beta_reg_eleven),
+    .debug_slowclock(M_beta_debug_slowclock),
+    .statedebug(M_beta_statedebug),
+    .wdsel_output(M_beta_wdsel_output),
+    .write_addr(M_beta_write_addr)
   );
   wire [1-1:0] M_buttondetect_out;
   reg [1-1:0] M_buttondetect_in;
@@ -67,6 +78,7 @@ module au_top_0 (
   );
   
   always @* begin
+    M_gameposition_d = M_gameposition_q;
     M_gamestate_d = M_gamestate_q;
     
     M_reset_cond_in = ~rst_n;
@@ -76,10 +88,11 @@ module au_top_0 (
     io_led = 24'h000000;
     M_btn_cond_in = io_button[0+0-:1];
     M_buttondetect_in = M_btn_cond_out;
-    M_cu_test_button = M_buttondetect_out;
-    M_gamestate_d = M_cu_test_out;
-    M_cu_test_selector = io_dip[0+6+1-:2];
-    io_led[8+0+7-:8] = M_cu_test_counter_out;
+    M_beta_button = M_buttondetect_out;
+    M_gameposition_d = M_beta_positionl1;
+    M_gamestate_d = M_beta_reg_eleven;
+    io_led[0+0+7-:8] = M_gameposition_q[0+7-:8];
+    io_led[8+0+7-:8] = M_gameposition_q[8+7-:8];
     M_seg_values = {M_gamestate_q[12+3-:4], M_gamestate_q[8+3-:4], M_gamestate_q[4+3-:4], M_gamestate_q[0+3-:4]};
     io_seg = ~M_seg_seg;
     io_sel = ~M_seg_sel;
@@ -88,8 +101,10 @@ module au_top_0 (
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       M_gamestate_q <= 1'h0;
+      M_gameposition_q <= 1'h0;
     end else begin
       M_gamestate_q <= M_gamestate_d;
+      M_gameposition_q <= M_gameposition_d;
     end
   end
   

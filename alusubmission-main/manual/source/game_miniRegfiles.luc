@@ -92,7 +92,7 @@ module game_miniRegfiles (
     
     //For debugging
     score = gamestate_r0.q;
-    positionl1 = line8_r8.q;
+    positionl1 = line1_r1.q;
     positionl2 = line2_r2.q;
   }
 }

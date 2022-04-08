@@ -103,7 +103,7 @@ module game_CU (
         wdsel = b01;
         we = b1;
         // state testb
-        statedff.d = regfiledataa;
+        statedff.d = b1111111111111111;
         regfile_read_address_a = b1011;
         state_counter.d = 0;  // show which state we are in
         if (button){
@@ -120,15 +120,7 @@ module game_CU (
         state_counter.d = 1;  // show which state we are in          
         statedff.d = regfiledataa;
         regfile_read_address_a = b1011;
-        if(button){
         game_fsm.d = game_fsm.RESET2;
-          }
-          else{
-          game_fsm.d = game_fsm.SETSTART;
-        }
-        // state test
-        //statedff.d = b00000001;
-        
         
   
       game_fsm.RESET2:
@@ -139,12 +131,8 @@ module game_CU (
         statedff.d = regfiledataa;
         regfile_read_address_a = b1011;
         state_counter.d = 2;                      
-        if(button){
         game_fsm.d = game_fsm.RESET3;
-          }
-          else{
-          game_fsm.d = game_fsm.RESET2;
-        }
+
           
       game_fsm.RESET3:
         regfile_write_address = b0011;
@@ -152,13 +140,9 @@ module game_CU (
         we = b1;
         statedff.d = regfiledataa;
         regfile_read_address_a = b1011;
-        state_counter.d = 3;  // show which state we are in                     
-          if (button){
+        state_counter.d = 3;  // show which state we are in
         game_fsm.d = game_fsm.RESET4;
-          }
-          else{
-          game_fsm.d = game_fsm.RESET3;
-        }
+
           
       game_fsm.RESET4:
         regfile_write_address = b0100;
@@ -167,12 +151,8 @@ module game_CU (
         statedff.d = regfiledataa;
         regfile_read_address_a = b1011;
         state_counter.d = 4;  // show which state we are in                              
-          if(button){
         game_fsm.d = game_fsm.RESET5;
-          }
-          else{
-          game_fsm.d = game_fsm.RESET4;
-        }
+
           
       game_fsm.RESET5:
         regfile_write_address = b0101;
@@ -181,12 +161,8 @@ module game_CU (
         statedff.d = regfiledataa;
         regfile_read_address_a = b1011;
         state_counter.d = 5;  // show which state we are in                     
-          if(button){
         game_fsm.d = game_fsm.RESET6;
-          }
-          else{
-          game_fsm.d = game_fsm.RESET5;
-        }
+
           
       game_fsm.RESET6:
         regfile_write_address = b0110;
@@ -195,12 +171,8 @@ module game_CU (
         statedff.d = regfiledataa;
         state_counter.d = 6;  // show which state we are in                               
         regfile_read_address_a = b1011;
-        if(button){
         game_fsm.d = game_fsm.RESET7;
-          }
-          else{
-          game_fsm.d = game_fsm.RESET6;
-        }
+
         
       game_fsm.RESET7:
         regfile_write_address = b0111;
@@ -209,12 +181,8 @@ module game_CU (
         statedff.d = regfiledataa;
         state_counter.d = 7;  // show which state we are in                               
         regfile_read_address_a = 1011;
-        if(button){
         game_fsm.d = game_fsm.RESET8;
-          }
-          else{
-          game_fsm.d = game_fsm.RESET7;
-        }
+
             
       game_fsm.RESET8:
         regfile_write_address = b1000;
@@ -224,12 +192,8 @@ module game_CU (
         // state test
         statedff.d = regfiledataa;
         regfile_read_address_a = b1011;
-        if(button){
         game_fsm.d = game_fsm.INCREASELINE;
-          }
-          else{
-          game_fsm.d = game_fsm.RESET8;
-        }
+
         
           
       game_fsm.INCREASELINE:
@@ -248,12 +212,8 @@ module game_CU (
        // state test
        statedff.d = regfiledataa;
        regfile_read_address_a = b1011;
-       if(button){
        game_fsm.d = game_fsm.DETERMINENEXT;
-          }
-          else{
-          game_fsm.d = game_fsm.INCREASELINE;
-        }
+
           
      game_fsm.DETERMINENEXT:
         // determine which line we are at by reading from reg 11
@@ -261,7 +221,6 @@ module game_CU (
         regfile_read_address_b = b1011;
         statedff.d = regfiledatab;
         state_counter.d = 10;  // show which state we are in                                                   
-        if(button){
         if (regfiledatab == 16h0001) { // we are at line 1 
             game_fsm.d = game_fsm.LINE1;
         } else if (regfiledatab == 16h0002) { //we are line 2 
@@ -279,10 +238,8 @@ module game_CU (
         } else if (regfiledatab == 16h0008) {
             game_fsm.d = game_fsm.LINE8;
         }
-          }
-          else{
-          game_fsm.d = game_fsm.DETERMINENEXT;
-        }
+
+        
         
       game_fsm.LINE1:
         alufn = b000000;
@@ -528,7 +485,7 @@ module game_CU (
         regfile_read_address_b = b0001;
         
         // state test
-        //statedff.d = b01111110;
+        statedff.d = b0000000011111111;
               
         if(button){
           game_fsm.d = game_fsm.INCREASELINE;
@@ -539,6 +496,7 @@ module game_CU (
             regfile_read_address_a = b0001;
             regfile_write_address = b0001;
             bsel = b01;
+            asel = b00;
             we = b1;
         state_counter.d = 28;  // show which state we are in                                                   
           
@@ -557,6 +515,7 @@ module game_CU (
             regfile_read_address_a = b0010;
             regfile_write_address = b0010; // write r2 with new value
             bsel = b01;
+            asel = b00;
             we = b1;
         state_counter.d = 29;  // show which state we are in                                                   
           
@@ -575,6 +534,7 @@ module game_CU (
             regfile_read_address_a = b0011;
             regfile_write_address = b0011;
             bsel = b01;
+            asel = b00;
             we = b1;
         state_counter.d = 30;  // show which state we are in                                                   
           
@@ -593,6 +553,7 @@ module game_CU (
             regfile_read_address_a = b0100;
             regfile_write_address = b0100;
             bsel = b01;
+            asel = b00;
             we = b1;
         state_counter.d = 31;  // show which state we are in                                                             
             game_fsm.d = game_fsm.SHIFTL4;
@@ -610,6 +571,7 @@ module game_CU (
             regfile_read_address_a = b0101;
             regfile_write_address = b0101;
             bsel = b01;
+            asel = b00;
             we = b1;
         state_counter.d = 32;  // show which state we are in                                                   
           
@@ -628,6 +590,7 @@ module game_CU (
             regfile_read_address_a = b0110;
             regfile_write_address = b0110;
             bsel = b01;
+            asel = b00;
             we = b1;
         state_counter.d = 33;  // show which state we are in                                                   
           
@@ -646,6 +609,7 @@ module game_CU (
             regfile_read_address_a = b0111;
             regfile_write_address = b0111;
             bsel = b01;
+            asel = b00;
             we = b1;
         state_counter.d = 34;  // show which state we are in                                                   
           
@@ -683,6 +647,7 @@ module game_CU (
             regfile_read_address_a = b0001;
             regfile_write_address = b0001;
             bsel = b01;
+            asel = b00;
             we = b1;
         state_counter.d = 36;  // show which state we are in                                                   
           
@@ -701,6 +666,7 @@ module game_CU (
           regfile_read_address_a = b0010;
           regfile_write_address = b0010;
           bsel = b01;
+          asel = b00;
           we = b1;
         state_counter.d = 37;  // show which state we are in                                                   
           
@@ -719,6 +685,7 @@ module game_CU (
           regfile_read_address_a = b0011;
           regfile_write_address = b0011;
           bsel = b01;
+          asel = b00;
           we = b1;
         state_counter.d = 38;  // show which state we are in                                                   
           
@@ -737,6 +704,7 @@ module game_CU (
           regfile_read_address_a = b0100;
           regfile_write_address = b0100;
           bsel = b01;
+          asel = b00;
           we = b1;
         state_counter.d = 39;  // show which state we are in                                                   
           
@@ -755,6 +723,7 @@ module game_CU (
           regfile_read_address_a = b0101;
           regfile_write_address = b0101;
           bsel = b01;
+          asel = b00;
           we = b1;
         state_counter.d = 40;  // show which state we are in                                                   
             
@@ -774,6 +743,7 @@ module game_CU (
           regfile_read_address_a = b0110;
           regfile_write_address = b0110;
           bsel = b01;
+          asel = b00;
           we = b1;
         state_counter.d = 41;  // show which state we are in                                                   
           
@@ -792,6 +762,7 @@ module game_CU (
           regfile_read_address_a = b0111;
           regfile_write_address = b0111;
           bsel = b01;
+          asel = b00;
           we = b1;
         state_counter.d = 42;  // show which state we are in                                                   
           

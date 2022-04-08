@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/cajhm/OneDrive - Singapore University of Technology and Design/Y2T4/compstruct1d/fsmstacker/alusubmission-main/manual/work/vivado/manual/manual.runs/synth_1'
+HD_PWD='C:/Users/KM/Documents/Alchitry/stacker/StackerGame/alusubmission-main/manual/work/vivado/manual/manual.runs/synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

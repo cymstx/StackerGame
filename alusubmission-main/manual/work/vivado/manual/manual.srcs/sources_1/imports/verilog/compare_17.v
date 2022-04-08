@@ -4,11 +4,11 @@
    This is a temporary file and any changes made to it will be destroyed.
 */
 
-module comp_15 (
+module compare_17 (
     input z,
     input v,
     input n,
-    input [5:0] op,
+    input [5:0] alufn_signal,
     output reg [15:0] out
   );
   
@@ -17,7 +17,7 @@ module comp_15 (
   always @* begin
     out = 16'h0000;
     
-    case (op)
+    case (alufn_signal)
       default: begin
         out[0+0-:1] = 1'h0;
       end
